@@ -4,15 +4,13 @@ require 'nokogiri'
 require 'open-uri'
 
 dest_dir = "questionsXYZ"
-
 Dir.mkdir(dest_dir) unless File.directory?(dest_dir)
 
 q = {}
-
 c = {}
 
 (1..400).to_a.each do |i|
-  doc = Nokogiri::HTML(open('http://www.lama-ole-nydahl.de/fragen/?p=' + i.to_s))
+  doc = Nokogiri::HTML(open('http://www.lama-ole-nydahl.de/fragen/?p=' + i.to_s),nil,'UTF-8')
 
   qa_section = doc.xpath('//div[@id="inhalt"]/div[@class="article"]')
 
@@ -30,12 +28,7 @@ c = {}
   categories = qa_section.xpath('.//span[@class="cats"]/a')
 
   File.open(dest_dir + '/question' + i.to_s + '.html', 'w') do |f|
-    f.write("<div id='content'>\n")
-    f.write("  <div id='question'>" + question + "</div>\n")
-    f.write("  <div id='answer'>\n")
-    f.write(    answer + "\n")
-    f.write("  </div>\n")
-    f.write("</div>\n")
+    f.write("<div id='content'>\n  <div id='question'>" + question + "</div>\n  <div id='answer'>\n" + answer + "\n  </div>\n</div>\n")
   end
 
   categories.each do |category|
@@ -58,16 +51,11 @@ end
 i=1
 c.each do |category,tagnames|
   File.open(dest_dir + '/cat' + i.to_s + '.html', 'w') do |f|
-    f.write("<div id='content'>\n")
-    f.write("  <div id='header'>" + category + "</div>\n")
-    f.write("  <div id='nav'>\n")
-    f.write("    <ul>\n")
+    f.write("<div id='content'>\n  <div id='header'><h1>" + category + "</h1></div>\n  <div id='nav'>\n    <ul>\n")
     tagnames.each do |h|
       f.write("      <li><a href='tag" + (q.keys.find_index(h)+1).to_s  + ".html'>" + h + "</a></li>\n")
     end
-    f.write("    </ul>\n")
-    f.write("  </div>\n")
-    f.write("</div>\n")
+    f.write("    </ul>\n  </div>\n</div>\n")
   end
   i+=1
 end
@@ -75,19 +63,14 @@ end
 i=1
 q.each do |tag,files|
   File.open(dest_dir + '/tag' + i.to_s + '.html', 'w') do |f|
-    f.write("<div id='content'>\n")
-    f.write("  <div id='header'>" + tag + "</div>\n")
-    f.write("  <div id='nav'>\n")
+    f.write("<div id='content'>\n  <div id='header'><h1>" + tag + "</h1></div>\n  <div id='nav'>\n    <ul>\n")
     f.write("    <ul>\n")
     files.each do |h|
       h.each do |filename,question|
         f.write("      <li><a href='" + filename + "'>" + question + "</a></li>\n")
       end
     end
-    f.write("    </ul>\n")
-    f.write("  </div>\n")
-    f.write("</div>\n")
+    f.write("    </ul>\n  </div>\n</div>\n")
   end
-
   i+=1
 end

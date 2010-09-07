@@ -6,7 +6,7 @@
     $('body').append('<div id="progress">Loading...</div>');
     scrollTo(0,0);
     $('#container').load(url + ' #content', function(){
-        var title = $('h1').html() || 'Hello!';     
+        var title = $('h1').html() || 'Hello!';
         $('.leftButton').remove();
         hist.unshift({'url':url});
         if (hist.length > 1) {
