@@ -10,7 +10,7 @@
         $('.leftButton').remove();
         hist.unshift({'url':url});
         if (hist.length > 1) {
-            $('#header').append('<div class="leftButton">Zur&uuml;ck</div>');
+            $('#header').append('<div class="leftButton">&laquo;</div>');
             $('#header .leftButton').click(function(){
                 var thisPage = hist.shift();
                 var previousPage = hist.shift();

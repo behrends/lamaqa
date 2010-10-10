@@ -12,32 +12,29 @@ body {
     border-color: #666;
     border-style: solid;
     border-width: 0 0 1px 0;
-}
-#header h1 {
     color: #222;
-    font-size: 20px;
     font-weight: bold;
-    margin: 0 auto;
-    max-width: 200px;
-    overflow: hidden;
-    padding: 10px 0;
     text-align: center;
     text-overflow: ellipsis;
     text-shadow: 0px 1px 0px #fff;
+}
+#header h1 {
+    font-size: 18px;
+    margin: 0 auto;
+    max-width: 230px;
+    overflow: hidden;
+    padding: 10px 0;
     white-space: nowrap;
 }
 #header div.leftButton {
     -webkit-border-image: url(images/back_button.png) 0 8 0 14;
     border-width: 0 8px 0 14px;
     color: white;
-    font-weight: bold;
     left: 6px;
     line-height: 28px;
     max-width: 50px;
     overflow: hidden;
     position: absolute;
-    text-align: center;
-    text-overflow: ellipsis;
     text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
     top: 7px;
     white-space: nowrap;
@@ -72,6 +69,12 @@ ul li a:active,ul li a:hover {
 }
 #content {
     text-shadow: 0px 1px 0px #fff;
+}
+#question {
+    font-size: 14px;
+    margin: 0 auto;
+    max-width: 230px;
+    padding: 10px 0;
 }
 #progress {
     -webkit-border-radius: 10px;

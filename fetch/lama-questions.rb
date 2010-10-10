@@ -1,13 +1,15 @@
 #!/usr/bin/ruby
 require 'rubygems'
+require 'fileutils'
 require 'nokogiri'
 require 'open-uri'
 
-dest_dir = "questionsXYZ"
+dest_dir = "questions"
 Dir.mkdir(dest_dir) unless File.directory?(dest_dir)
 
 q = {}
 c = {}
+umlauts = { "ae" => "\303\244", "oe" => "\303\266", "ue" => "\303\274" }
 
 (1..400).to_a.each do |i|
   doc = Nokogiri::HTML(open('http://www.lama-ole-nydahl.de/fragen/?p=' + i.to_s),nil,'UTF-8')
@@ -20,7 +22,7 @@ c = {}
 
   answer = ""
   qa_section.xpath('./p[not(@class)]').each do |part|
-    answer += "<p>" + part + "</p>"
+    answer += "<p>" + part.to_s.gsub("Antwort von Lama Ole Nydahl:","<b>Antwort von Lama Ole Nydahl:</b><br/>") + "</p>"
   end
 
   tags = qa_section.xpath('.//span[@class="tags"]/a')
@@ -28,20 +30,25 @@ c = {}
   categories = qa_section.xpath('.//span[@class="cats"]/a')
 
   File.open(dest_dir + '/question' + i.to_s + '.html', 'w') do |f|
-    f.write("<div id='content'>\n  <div id='question'>" + question + "</div>\n  <div id='answer'>\n" + answer + "\n  </div>\n</div>\n")
+    f.write("<div id='content'>\n  <div id='header'>\n   <div id='question'>" + question + "</div>\n  </div>\n  <div id='answer'>\n" + answer + "\n  </div>\n</div>\n")
   end
 
   categories.each do |category|
     cat = category.content.tr('""','')
+    umlauts.each_pair {|key,value| cat.gsub!(key,value)}
 
     tags.each do |tag|
       t = tag.content.tr('""','')
+      umlauts.each_pair {|key,value| t.gsub!(key,value)}
+
       c[cat] = c[cat].nil? ? [t] : c[cat].push(t) unless c[cat] && !c[cat].find_index(t).nil?
     end
   end
 
   tags.each do |tag|
     t = tag.content.tr('""','')
+    umlauts.each_pair {|key,value| t.gsub!(key,value)}
+
     qm = {'question' + i.to_s + '.html' => question}
     q[t] = q[t].nil? ? [qm] : q[t].push(qm)
   end
@@ -74,3 +81,8 @@ q.each do |tag,files|
   end
   i+=1
 end
+
+FileUtils.cp("../impressum.html", dest_dir)
+FileUtils.cp("../index.html", dest_dir)
+FileUtils.cp("../info.html", dest_dir)
+FileUtils.cp_r("../resources", dest_dir)
