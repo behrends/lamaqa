@@ -9,7 +9,7 @@ Dir.mkdir(dest_dir) unless File.directory?(dest_dir)
 
 q = {}
 c = {}
-umlauts = { "ae" => "\303\244", "oe" => "\303\266", "ue" => "\303\274" }
+umlauts = { "ae" => "\303\244", "oe" => "\303\266", /([^ae])ue/ => '\1' + "\303\274" } #regexp in ue: Treue, Frauen
 
 (1..400).to_a.each do |i|
   doc = Nokogiri::HTML(open('http://www.lama-ole-nydahl.de/fragen/?p=' + i.to_s),nil,'UTF-8')

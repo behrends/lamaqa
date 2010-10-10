@@ -30,6 +30,7 @@ body {
     -webkit-border-image: url(images/back_button.png) 0 8 0 14;
     border-width: 0 8px 0 14px;
     color: white;
+    font-size: 22px;
     left: 6px;
     line-height: 28px;
     max-width: 50px;
