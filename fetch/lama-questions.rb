@@ -82,6 +82,7 @@ q.each do |tag,files|
   i+=1
 end
 
+FileUtils.cp("../cache-manifest.manifest", dest_dir)
 FileUtils.cp("../impressum.html", dest_dir)
 FileUtils.cp("../index.html", dest_dir)
 FileUtils.cp("../info.html", dest_dir)
