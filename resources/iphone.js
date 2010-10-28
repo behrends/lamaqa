@@ -11,7 +11,8 @@
         hist.unshift({'url':url});
         if (hist.length > 1) {
             $('#header').append('<div class="leftButton">&laquo;</div>');
-            $('#header .leftButton').click(function(){
+            $('#header .leftButton').click(function(e){
+                $(e.target).addClass('clicked');
                 var thisPage = hist.shift();
                 var previousPage = hist.shift();
                 loadPage(previousPage.url);

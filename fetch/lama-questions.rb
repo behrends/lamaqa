@@ -9,7 +9,7 @@ Dir.mkdir(dest_dir) unless File.directory?(dest_dir)
 
 q = {}
 c = {}
-umlauts = { "ae" => "\303\244", "oe" => "\303\266", /([^ae])ue/ => '\1' + "\303\274" } #regexp in ue: Treue, Frauen
+special_chars = { "ae" => "\303\244", "oe" => "\303\266", /([^ae])ue/ => '\1' + "\303\274", "\303\203" => "\303\234", "\342\200\231" => "'" } #regexp in ue: Treue, Frauen
 
 (1..400).to_a.each do |i|
   doc = Nokogiri::HTML(open('http://www.lama-ole-nydahl.de/fragen/?p=' + i.to_s),nil,'UTF-8')
@@ -35,11 +35,11 @@ umlauts = { "ae" => "\303\244", "oe" => "\303\266", /([^ae])ue/ => '\1' + "\303\
 
   categories.each do |category|
     cat = category.content.tr('""','')
-    umlauts.each_pair {|key,value| cat.gsub!(key,value)}
+    special_chars.each_pair {|key,value| cat.gsub!(key,value)}
 
     tags.each do |tag|
       t = tag.content.tr('""','')
-      umlauts.each_pair {|key,value| t.gsub!(key,value)}
+      special_chars.each_pair {|key,value| t.gsub!(key,value)}
 
       c[cat] = c[cat].nil? ? [t] : c[cat].push(t) unless c[cat] && !c[cat].find_index(t).nil?
     end
@@ -47,7 +47,7 @@ umlauts = { "ae" => "\303\244", "oe" => "\303\266", /([^ae])ue/ => '\1' + "\303\
 
   tags.each do |tag|
     t = tag.content.tr('""','')
-    umlauts.each_pair {|key,value| t.gsub!(key,value)}
+    special_chars.each_pair {|key,value| t.gsub!(key,value)}
 
     qm = {'question' + i.to_s + '.html' => question}
     q[t] = q[t].nil? ? [qm] : q[t].push(qm)
@@ -71,7 +71,6 @@ i=1
 q.each do |tag,files|
   File.open(dest_dir + '/tag' + i.to_s + '.html', 'w') do |f|
     f.write("<div id='content'>\n  <div id='header'><h1>" + tag + "</h1></div>\n  <div id='nav'>\n    <ul>\n")
-    f.write("    <ul>\n")
     files.each do |h|
       h.each do |filename,question|
         f.write("      <li><a href='" + filename + "'>" + question + "</a></li>\n")
@@ -82,7 +81,6 @@ q.each do |tag,files|
   i+=1
 end
 
-FileUtils.cp("../cache-manifest.manifest", dest_dir)
 FileUtils.cp("../impressum.html", dest_dir)
 FileUtils.cp("../index.html", dest_dir)
 FileUtils.cp("../info.html", dest_dir)
