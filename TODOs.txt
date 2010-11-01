@@ -1,3 +1,6 @@
-index -> categories -> tags -> question
 random question
 search
+impressum, info
+diamond way colors and branding
+jump to top button on footer
+sliding effect
