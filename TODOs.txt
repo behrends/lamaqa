@@ -1,9 +1,0 @@
-random question
-reopen app with last position
-search
-impressum, info
-diamond way colors and branding
-jump to top button on footer
-sliding effect
-help info box on how to install app (welt.de)
-finalize fetch script
